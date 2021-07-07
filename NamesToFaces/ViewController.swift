@@ -10,7 +10,7 @@ import UIKit
 final class ViewController: UICollectionViewController {
 
 	// MARK: - Properties
-	var people: [Person] = []
+	private var people: [Person] = []
 
 	// MARK: - Lifecycle
 	override func viewDidLoad() {
@@ -18,12 +18,38 @@ final class ViewController: UICollectionViewController {
 		navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewPerson))
 	}
 
-	// MARK: - Selectors
-	@objc func addNewPerson() {
+	// MARK: - Actions
+	@objc private func addNewPerson() {
 		let picker = UIImagePickerController()
 		picker.allowsEditing = true
 		picker.delegate = self
+		if UIImagePickerController.isSourceTypeAvailable(.camera) {
+			picker.sourceType = .camera
+		}
 		present(picker, animated: true)
+	}
+
+	private func rename(person: Person) {
+		let alertController = UIAlertController(title: "Rename person", message: nil, preferredStyle: .alert)
+		alertController.addTextField()
+		alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+		alertController.addAction(UIAlertAction(title: "OK", style: .default) { [weak self, weak alertController] _ in
+			guard let newName = alertController?.textFields?.first?.text else { return }
+			person.name = newName
+
+			self?.collectionView.reloadData()
+		})
+		present(alertController, animated: UIView.areAnimationsEnabled)
+	}
+
+	private func delete(person: Person) {
+		let alertController = UIAlertController(title: "Delete person", message: "Are you sure want to delete this person?", preferredStyle: .alert)
+		alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+		alertController.addAction(UIAlertAction(title: "OK", style: .destructive) { [weak self] _ in
+			self?.people.removeAll { $0 == person }
+			self?.collectionView.reloadData()
+		})
+		present(alertController, animated: UIView.areAnimationsEnabled)
 	}
 }
 
@@ -57,16 +83,13 @@ extension ViewController {
 	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		let person = people[indexPath.item]
 
-		let alertController = UIAlertController(title: "Rename person", message: nil, preferredStyle: .alert)
-		alertController.addTextField()
-		alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-		alertController.addAction(UIAlertAction(title: "OK", style: .default) { [weak self, weak alertController] _ in
-			guard let newName = alertController?.textFields?.first?.text else { return }
-			person.name = newName
-
-			self?.collectionView.reloadData()
+		let alertController = UIAlertController(title: "What would you like to do?", message: nil, preferredStyle: .actionSheet)
+		alertController.addAction(UIAlertAction(title: "Rename person", style: .default) { [weak self] _ in
+			self?.rename(person: person)
 		})
-
+		alertController.addAction(UIAlertAction(title: "Delete person", style: .default) { [weak self] _ in
+			self?.delete(person: person)
+		})
 		present(alertController, animated: true)
 	}
 }
@@ -91,7 +114,7 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
 		dismiss(animated: true)
 	}
 
-	func getDocumentsDirectory() -> URL {
+	private func getDocumentsDirectory() -> URL {
 		let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
 		return paths[0]
 	}
