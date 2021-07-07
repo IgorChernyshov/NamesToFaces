@@ -30,19 +30,31 @@
                                     <rect key="frame" x="0.0" y="0.0" width="140" height="180"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B5k-wH-J9Y">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="B5k-wH-J9Y">
                                             <rect key="frame" x="10" y="10" width="120" height="120"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="120" id="LRI-p0-7MN"/>
+                                                <constraint firstAttribute="height" constant="120" id="hES-fu-9HZ"/>
+                                            </constraints>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kjE-64-IEa">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kjE-64-IEa">
                                             <rect key="frame" x="10" y="134" width="120" height="40"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="16"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="kjE-64-IEa" secondAttribute="trailing" constant="10" id="0DD-e3-aII"/>
+                                        <constraint firstItem="B5k-wH-J9Y" firstAttribute="top" secondItem="0DT-pO-ZNS" secondAttribute="top" constant="10" id="FZ9-Sr-lcc"/>
+                                        <constraint firstAttribute="bottom" secondItem="kjE-64-IEa" secondAttribute="bottom" constant="6" id="Ktb-tz-ad7"/>
+                                        <constraint firstAttribute="trailing" secondItem="B5k-wH-J9Y" secondAttribute="trailing" constant="10" id="Svm-1w-MVm"/>
+                                        <constraint firstItem="B5k-wH-J9Y" firstAttribute="leading" secondItem="0DT-pO-ZNS" secondAttribute="leading" constant="10" id="WEb-mh-0Ps"/>
+                                        <constraint firstItem="kjE-64-IEa" firstAttribute="top" secondItem="B5k-wH-J9Y" secondAttribute="bottom" constant="4" id="pzm-Db-8AZ"/>
+                                        <constraint firstItem="kjE-64-IEa" firstAttribute="leading" secondItem="0DT-pO-ZNS" secondAttribute="leading" constant="10" id="soc-oq-7YY"/>
+                                    </constraints>
                                 </collectionViewCellContentView>
+                                <size key="customSize" width="140" height="180"/>
                                 <connections>
                                     <outlet property="imageView" destination="B5k-wH-J9Y" id="61k-Zb-1qL"/>
                                     <outlet property="nameLabel" destination="kjE-64-IEa" id="ifP-6v-cQH"/>
