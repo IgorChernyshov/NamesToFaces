@@ -16,6 +16,18 @@ final class ViewController: UICollectionViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewPerson))
+
+		if let savedPeople = UserDefaults.standard.object(forKey: "people") as? Data {
+			do {
+				people = try JSONDecoder().decode([Person].self, from: savedPeople)
+			} catch {
+				print("Failed to load people")
+			}
+			//		-= NSCoding =-
+			//		if let decodedPeople = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(savedPeople) as? [Person] {
+			//			people = decodedPeople
+			//		}
+		}
 	}
 
 	// MARK: - Actions
@@ -36,8 +48,8 @@ final class ViewController: UICollectionViewController {
 		alertController.addAction(UIAlertAction(title: "OK", style: .default) { [weak self, weak alertController] _ in
 			guard let newName = alertController?.textFields?.first?.text else { return }
 			person.name = newName
-
 			self?.collectionView.reloadData()
+			self?.save()
 		})
 		present(alertController, animated: UIView.areAnimationsEnabled)
 	}
@@ -50,6 +62,19 @@ final class ViewController: UICollectionViewController {
 			self?.collectionView.reloadData()
 		})
 		present(alertController, animated: UIView.areAnimationsEnabled)
+	}
+
+	// MARK: - Data Operations
+	private func save() {
+		if let savedData = try? JSONEncoder().encode(people) {
+			UserDefaults.standard.set(savedData, forKey: "people")
+		} else {
+			print("Failed to save people.")
+		}
+		//	-= NSCoding =-
+		//	if let savedData = try? NSKeyedArchiver.archivedData(withRootObject: people, requiringSecureCoding: false) {
+		//		UserDefaults.standard.set(savedData, forKey: "people")
+		//	}
 	}
 }
 
@@ -110,7 +135,7 @@ extension ViewController: UIImagePickerControllerDelegate, UINavigationControlle
 		let person = Person(name: "Unknown", image: imageName)
 		people.append(person)
 		collectionView.reloadData()
-
+		save()
 		dismiss(animated: true)
 	}
 
