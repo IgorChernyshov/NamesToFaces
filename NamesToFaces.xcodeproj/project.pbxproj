@@ -15,6 +15,8 @@
 		D6141FFD26941BEA00918468 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6141FFB26941BEA00918468 /* LaunchScreen.storyboard */; };
 		D614200626941FA300918468 /* PersonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614200526941FA300918468 /* PersonCell.swift */; };
 		D61421462695759A00918468 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61421452695759A00918468 /* Person.swift */; };
+		D6AB77C026DB4D3000EF168E /* KeychainItemAccessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AB77BE26DB4D3000EF168E /* KeychainItemAccessibility.swift */; };
+		D6AB77C126DB4D3000EF168E /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AB77BF26DB4D3000EF168E /* KeychainWrapper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		D6141FFE26941BEA00918468 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D614200526941FA300918468 /* PersonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonCell.swift; sourceTree = "<group>"; };
 		D61421452695759A00918468 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
+		D6AB77BE26DB4D3000EF168E /* KeychainItemAccessibility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainItemAccessibility.swift; sourceTree = "<group>"; };
+		D6AB77BF26DB4D3000EF168E /* KeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +64,7 @@
 		D6141FEF26941BE800918468 /* NamesToFaces */ = {
 			isa = PBXGroup;
 			children = (
+				D6AB77C326DB4D3300EF168E /* KeychainWrapper */,
 				D6141FF026941BE800918468 /* AppDelegate.swift */,
 				D6141FF226941BE800918468 /* SceneDelegate.swift */,
 				D6141FF426941BE800918468 /* ViewController.swift */,
@@ -71,6 +76,15 @@
 				D6141FFE26941BEA00918468 /* Info.plist */,
 			);
 			path = NamesToFaces;
+			sourceTree = "<group>";
+		};
+		D6AB77C326DB4D3300EF168E /* KeychainWrapper */ = {
+			isa = PBXGroup;
+			children = (
+				D6AB77BE26DB4D3000EF168E /* KeychainItemAccessibility.swift */,
+				D6AB77BF26DB4D3000EF168E /* KeychainWrapper.swift */,
+			);
+			path = KeychainWrapper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -146,8 +160,10 @@
 				D61421462695759A00918468 /* Person.swift in Sources */,
 				D6141FF526941BE800918468 /* ViewController.swift in Sources */,
 				D6141FF126941BE800918468 /* AppDelegate.swift in Sources */,
+				D6AB77C126DB4D3000EF168E /* KeychainWrapper.swift in Sources */,
 				D614200626941FA300918468 /* PersonCell.swift in Sources */,
 				D6141FF326941BE800918468 /* SceneDelegate.swift in Sources */,
+				D6AB77C026DB4D3000EF168E /* KeychainItemAccessibility.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

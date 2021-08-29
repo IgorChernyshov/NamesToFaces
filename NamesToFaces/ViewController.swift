@@ -6,16 +6,26 @@
 //
 
 import UIKit
+import LocalAuthentication
 
 final class ViewController: UICollectionViewController {
 
 	// MARK: - Properties
 	private var people: [Person] = []
+	private var isAuthenticated: Bool = false {
+		didSet {
+			self.collectionView.reloadData()
+			if isAuthenticated == true {
+				navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewPerson))
+			}
+		}
+	}
 
 	// MARK: - Lifecycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewPerson))
+		title = "Names2Faces"
+		navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Unlock", style: .done, target: self, action: #selector(unlockDidTap))
 
 		if let savedPeople = UserDefaults.standard.object(forKey: "people") as? Data {
 			do {
@@ -64,6 +74,57 @@ final class ViewController: UICollectionViewController {
 		present(alertController, animated: UIView.areAnimationsEnabled)
 	}
 
+	// MARK: - Authentication
+	@objc private func unlockDidTap() {
+		let context = LAContext()
+		var error: NSError?
+
+		if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+			authenticateWithBiometry(context: context)
+		} else {
+			authenticateWithPassword()
+		}
+	}
+
+	private func authenticateWithBiometry(context: LAContext) {
+		let reason = "Identify yourself!"
+
+		context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) {
+			[weak self] success, authenticationError in
+
+			DispatchQueue.main.async {
+				if success {
+					self?.isAuthenticated = true
+				} else {
+					let alertController = UIAlertController(title: "Authentication failed", message: "You could not be verified; please try again.", preferredStyle: .alert)
+					alertController.addAction(UIAlertAction(title: "OK", style: .default))
+					self?.present(alertController, animated: true)
+				}
+			}
+		}
+	}
+
+	private func authenticateWithPassword() {
+		let alertController = UIAlertController(title: "Biometry unavailable", message: "Enter a password.", preferredStyle: .alert)
+		alertController.addTextField()
+		alertController.addAction(UIAlertAction(title: "OK", style: .default) { [weak self] _ in
+			guard let password = alertController.textFields?.first?.text else { return }
+			if let savedPassword = KeychainWrapper.standard.string(forKey: "Password") {
+				if password == savedPassword {
+					self?.isAuthenticated = true
+				} else {
+					let wrongPasswordAlert = UIAlertController(title: "Wrong password", message: nil, preferredStyle: .alert)
+					wrongPasswordAlert.addAction(UIAlertAction(title: "OK", style: .default))
+					self?.present(wrongPasswordAlert, animated: UIView.areAnimationsEnabled)
+				}
+			} else {
+				KeychainWrapper.standard.set(password, forKey: "Password")
+				self?.isAuthenticated = true
+			}
+		})
+		self.present(alertController, animated: true)
+	}
+
 	// MARK: - Data Operations
 	private func save() {
 		if let savedData = try? JSONEncoder().encode(people) {
@@ -82,7 +143,7 @@ final class ViewController: UICollectionViewController {
 extension ViewController {
 
 	override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		people.count
+		isAuthenticated ? people.count : 0
 	}
 
 	override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
